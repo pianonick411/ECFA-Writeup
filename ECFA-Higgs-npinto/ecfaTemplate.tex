@@ -1,0 +1,188 @@
+%============================================%
+% Based on CLICdp templates by
+%
+% Rickard Stroem (lars.rickard.stroem@cern.ch)
+% (Updated: 26.07.2017)
+%   and 
+% Christian Grefe (christian.grefe@cern.ch)
+%
+% On SL6, use latex from CERN afs located here: 
+% /afs/cern.ch/sw/XML/texlive/latest/bin/x86_64-linux
+% see https://twiki.cern.ch/twiki/bin/view/CLIC/CLICSoftwareComputing#Latex
+% for the latest update
+%============================================%
+
+%\documentclass[11pt,a4paper,parskip=half]{scrartcl}
+\documentclass[11pt,a4paper]{scrartcl}
+
+% Defines default style and includes several useful packages
+\usepackage{ECFAreport}
+
+% Useful macros for writing CLICdp notes
+\usepackage{ECFAreport_definitions}
+
+% Fix hepnames
+\usepackage{xpatch}
+\makeatletter
+\xpatchcmd\@HepConStyle
+ {\edef\@upcode{\updefault}}
+ {\ifdefined\shapedefault\edef\@upcode{\shapedefault}\else\edef\@upcode{\updefault}\fi}
+ {}{}
+\makeatother
+
+% These commands reduce the spacing before and after subsection / subsubsection headings
+\RedeclareSectionCommand[
+  %runin=false,
+  %afterindent=false,
+  %%beforeskip=-.6\baselineskip,
+  %%afterskip=.2\baselineskip]{subsection}
+  beforeskip=1.\baselineskip,
+  afterskip=.5\baselineskip]{subsection}
+\RedeclareSectionCommand[
+  %runin=false,
+  %afterindent=false,
+  %%beforeskip=-.6\baselineskip,
+  %%afterskip=.2\baselineskip]{subsubsection}
+  beforeskip=1.\baselineskip,
+  afterskip=.5\baselineskip]{subsubsection}
+
+% Add your packages and macros in preamble.tex
+\input{preamble}
+\renewcommand{\familydefault}{\sfdefault}
+
+% for published papers
+\DeclareCiteCommand{\citejournal}[\mkbibbrackets]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\printfield{journaltitle}}%
+   \iffieldundef{volume}
+     {}%
+     {\setunit{\addspace}%
+     \printtext[bibhyperref]{\printfield{volume}}}%
+   \setunit{\addspace}%
+   \printtext[bibhyperref]{(\printdate)}% 
+   \iffieldundef{pages}
+     {}%add nothing if no pages
+     {\setunit{\addspace}%
+     \printtext[bibhyperref]{\printfield{pages}}%
+     }%
+     }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+  
+% for submitted, but not published papers (avoids stray spacing)
+\DeclareCiteCommand{\citesubmit}[\mkbibbrackets]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\printfield{journaltitle}}%
+   \setunit{\addspace}%
+   \printtext[bibhyperref]{(\printdate)}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+  
+  % for ATLAS CONF notes
+  \DeclareCiteCommand{\citeconf}[\mkbibbrackets]
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printtext[bibhyperref]{\printfield{howpublished}}%
+   \setunit{\addspace}%
+   \printtext[bibhyperref]{(\printdate)}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+%============================================%
+% Set up the title page
+%============================================%
+
+% Set the title of the note
+\title{ECFA Higgs Factory Study Note}
+
+% LICENCE
+\nolicence %Uncomment this line to remove the licence comment (not shown for drafts automatically)
+
+% Set the document number
+\notitlestamp % Uncomment this line to remove the stamp with the CLICdp document number
+
+% Set the publication date
+\date{\today}
+%\date{\formatdate{26}{7}{2017}}
+
+% Define the authors and their institutes, they will appear exactly in the order as they are added
+% Footnotes can be added using the \thanks command
+%\addauthor{Initials.~Name}{\institute{1}}
+\addauthor{Many authors}{\institute{1}}
+
+\addinstitute{1}{Many Institutes}
+%\addinstitute{2}{University, Country}
+
+% Add "On behalf of ... (optional)"
+%\onbehalfof{the CLICdp Collaboration} %use either this or /titlecomment{This work...} below
+
+% Define an abstract for the note 
+\abstract{\noindent
+
+Brief summary.
+}
+
+% Add comments to the title page (optional)
+%\titlecomment{Talk presented at CONFERENCE, PLACE, COUNTRY, 16--21 July 2017}
+%\titlecomment{This work was carried out in the framework of the CLICdp Collaboration} %use either this or /onbehalfof above
+
+%============================================%
+% Search path for images
+%============================================%
+
+\graphicspath{ {./logos/}{./figures/} }
+
+%============================================%
+% Options
+%============================================%
+
+% Uncomment this line for a draft version. Adds a watermark and a timestamp
+%\draftdocument
+
+% Uncomment this line to change all link colours to black
+%\nocolourlinks
+
+%============================================%
+% Bibliography
+%============================================%
+
+% define the list of bibliography data files
+\addbibresource{./bibliography/bibliography.bib}
+
+%============================================%
+% Adjust TOC table of contents spacing
+%============================================%
+
+\DeclareTOCStyleEntry[beforeskip=.2cm]{section}{section}
+%\DeclareTOCStyleEntry[beforeskip=0cm]{default}{subsection}
+
+%don't include subsubsubsections in the TOC
+\setcounter{tocdepth}{3}
+
+%============================================%
+% Start of the actual document
+%============================================%
+
+\begin{document}
+
+% generates the title page
+\titlepage
+\pagenumbering{arabic}\setcounter{page}{2}
+
+% table of contents may not be needed for a short note
+%\tableofcontents
+
+% include source for sections
+
+\input{./sections/introduction/formatting.tex}
+\input{./sections/introduction/introduction.tex}
+
+
+% add references
+\pagebreak
+\section{References}
+\printbibliography[heading=none]
+
+\end{document}

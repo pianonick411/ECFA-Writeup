@@ -1,0 +1,11 @@
+%% To-do markers
+\usepackage{todonotes}
+\usepackage{xpatch}
+\makeatletter
+\xpretocmd{\todo}{\@bsphack}{}{}
+\xapptocmd{\todo}{\@esphack}{}{}
+\makeatother
+\newcommand{\TODO}[1]{\todo[inline]{#1}}
+
+\usepackage{booktabs}
+\usepackage{csquotes}
